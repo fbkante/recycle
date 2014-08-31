@@ -17,15 +17,21 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+;; version 0.91 recycle-translate-alistを変更
+
+;;標準の変換用コマンドのために、requireしておく
+(require 'subword)
+
 ;;コマンドの変換テーブル 指定されたコマンドを実行する。nilは何も実行しない。tは変換前コマンドをそのまま再実行する
 (defvar recycle-translate-alist
-  '((forward-char             forward-symbol         forward-word)
-    (backward-char            backward-symbol        bakcward-word)
-    (self-insert-command      kill-word              kill-word)
-    (delete-char              backward-kill-word     backward-kill-word)
-    (backward-delete-char     backward-kill-word     kill-word)
-    (next-line                scroll-up              scroll-down)
-    (previous-line            scroll-down            scroll-up)))
+  '((forward-char             subword-forward        subword-backward)
+    (backward-char            subword-backward       subword-forward)
+    (self-insert-command      kill-word              subword-kill)
+    (delete-char              kill-word              subword-kill)
+    (backward-delete-char     backward-kill-word     subword-backward-kill)
+    (next-line                end-of-defun           beginning-of-defun)
+    (previous-line            beginning-of-defun     end-of-defun)
+    (recenter-top-bottom      scroll-up-line         scroll-down-line)))
 
 ;;念のため、これらのコマンドは無視する
 (defvar recycle-ignore '(kill-this-buffer kill-buffer recycle recycle-2nd repeat))
